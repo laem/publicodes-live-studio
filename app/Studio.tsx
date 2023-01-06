@@ -1,10 +1,10 @@
+'use client'
+
 import Editor from '@monaco-editor/react'
-import { useRouter } from 'next/router'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { utils } from 'publicodes'
 import { useCallback, useEffect, useState } from 'react'
 import { MonacoBinding } from 'y-monaco'
-import Documentation from './Documentation'
-import ErrorBoundary from './ErrorBoundary'
 import { generateRoomName } from '../components/share/studioShareUtils'
 import { UserBlock } from '../components/share/UserList'
 import useYjs from '../components/share/useYjs'
@@ -37,6 +37,7 @@ dépenses primeur:
 export default function Studio({ padName }) {
   const [layout, setLayout] = useState('split')
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [name, setName] = useState(padName || generateRoomName())
   const [share, setShare] = useState()
   const [editorValue, setEditorValue] = useState(EXAMPLE_CODE)
@@ -48,7 +49,7 @@ export default function Studio({ padName }) {
   const yjs = useYjs(urlFragment, 'database', share, setShare)
 
   useEffect(() => {
-    if (urlFragment.length > 2) router.replace('/studio/' + urlFragment)
+    if (urlFragment.length > 2) router.replace(urlFragment)
     //TODO refresh on first replace, to avoid
   }, [urlFragment])
 
@@ -56,7 +57,7 @@ export default function Studio({ padName }) {
     window?.navigator.clipboard.writeText(window.location.href)
   }, [window.location.href])
 
-  const { target } = router.query
+  const target = searchParams.get('target')
   const defaultTarget = target && decodeRuleName(target)
   const monacoCode = share && share.ydoc.getText('monacoCode')
 

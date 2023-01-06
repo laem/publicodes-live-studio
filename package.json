@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "@monaco-editor/react": "^4.4.6",
-    "monaco-editor": "^0.34.1",
+    "monaco-editor": "^0.33.0",
     "next": "^13.1.1",
     "publicodes": "^1.0.0-beta.66",
     "publicodes-react": "^1.0.0-beta.66",
