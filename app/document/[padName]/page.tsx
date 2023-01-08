@@ -182,6 +182,7 @@ export default function Studio({ params: { padName } }) {
             <Editor
               height="75vh"
               defaultLanguage="yaml"
+              options={{ minimap: { enabled: false } }}
               defaultValue={editorValue}
               onChange={(newValue) =>
                 console.log('setFromMonaco', newValue) ||
@@ -201,7 +202,6 @@ export default function Studio({ params: { padName } }) {
           }
         >
           <ErrorBoundary key={debouncedEditorValue}>
-            TODO: prévoir de changer la signature de EngineProvider
             <Documentation
               rules={debouncedEditorValue}
               onClickShare={handleShare}
