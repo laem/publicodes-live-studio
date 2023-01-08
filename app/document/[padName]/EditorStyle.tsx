@@ -5,9 +5,7 @@ export default styled.div`
     height: 600px;
     border: 1px solid #ccc;
   }
-  .yRemoteSelection {
-    background-color: rgb(250, 129, 0, 0.5);
-  }
+
   .yRemoteSelectionHead {
     position: absolute;
     border-left: orange solid 2px;
@@ -24,4 +22,23 @@ export default styled.div`
     left: -4px;
     top: -5px;
   }
+
+  ${(props) =>
+    props.users.map(
+      ({ id, color }) => `
+
+  .yRemoteSelection-${id} {
+    border-bottom: 2px dashed ${color}
+  }
+  .yRemoteSelectionHead-${id} {
+    border-left: ${color} solid 2px;
+    border-top:  ${color} solid 2px;
+    border-bottom: ${color}  solid 2px;
+  }
+  .yRemoteSelectionHead-${id}::after {
+    border: 3px solid ${color};
+  }
+   
+`
+    )}
 `

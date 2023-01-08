@@ -182,7 +182,7 @@ export default function Studio({ padName }) {
           </div>
 
           {share && (
-            <EditorStyle>
+            <EditorStyle users={yjs.users}>
               <Editor
                 height="75vh"
                 defaultLanguage="yaml"
