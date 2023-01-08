@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { utils } from 'publicodes'
 import { useCallback, useEffect, useState } from 'react'
 import { MonacoBinding } from 'y-monaco'
+import Documentation from './Documentation'
+import ErrorBoundary from './ErrorBoundary'
 import { generateRoomName } from './studioShareUtils'
 import { UserBlock } from './UserList'
 import useYjs from './useYjs'
@@ -198,11 +200,8 @@ export default function Studio({ padName }) {
             }[layout]
           }
         >
-          Documentation à placer ici
-          {/*
           <ErrorBoundary key={debouncedEditorValue}>
-             TODO: prévoir de changer la signature de EngineProvider
-
+            TODO: prévoir de changer la signature de EngineProvider
             <Documentation
               rules={debouncedEditorValue}
               onClickShare={handleShare}
@@ -210,7 +209,6 @@ export default function Studio({ padName }) {
               baseUrl="/studio"
             />
           </ErrorBoundary>
-		  */}
         </section>
       </div>
     </div>
