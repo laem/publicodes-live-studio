@@ -114,11 +114,12 @@ export default function Studio({ params: { padName } }) {
         }
 
         > ul {
-          background: var(--ifm-color-primary);
+          background: #2653ce;
           padding: 0.2rem;
           display: flex;
           justify-content: center;
           list-style-type: none;
+          margin: 0;
         }
 
         > ul > li {
@@ -136,14 +137,15 @@ export default function Studio({ params: { padName } }) {
             width: 100% !important;
           }
         }
+        button {
+          cursor: pointer;
+        }
       `}
     >
       <ul id="layoutButtons">
         {Object.entries(layoutModes).map(([key, value]) => (
           <li key={key} onClick={() => setLayout(key)}>
-            <button className="button button--sm button--secondary">
-              {value}
-            </button>
+            <button>{value}</button>
           </li>
         ))}
       </ul>
