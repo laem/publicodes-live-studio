@@ -1,6 +1,5 @@
 // Import your Client Component
 import Link from 'next/link'
-import Studio from './Studio'
 
 export default async function Page() {
   // Forward fetched data to your Client Component
