@@ -36,7 +36,7 @@ dépenses primeur:
     - prix . avocat * 3 avocat
 `
 
-export default function Studio({ padName }) {
+export default function Studio({ params: { padName } }) {
   const [layout, setLayout] = useState('split')
   const router = useRouter()
   const searchParams = useSearchParams()

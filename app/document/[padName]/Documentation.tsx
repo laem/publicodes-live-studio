@@ -12,7 +12,7 @@ import ErrorBoundary, { nl2br } from './ErrorBoundary'
 function invertObject(obj) {
   return Object.entries(obj).reduce((ret, entry) => {
     const [key, value] = entry
-    ret[value] = key
+    if (value != undefined) ret[value] = key
     return ret
   }, {})
 }
