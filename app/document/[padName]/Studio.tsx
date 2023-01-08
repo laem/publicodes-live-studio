@@ -6,6 +6,7 @@ import { utils } from 'publicodes'
 import { useCallback, useEffect, useState } from 'react'
 import { MonacoBinding } from 'y-monaco'
 import Documentation from './Documentation'
+import EditorStyle from './EditorStyle'
 import ErrorBoundary from './ErrorBoundary'
 import { generateRoomName } from './studioShareUtils'
 import { UserBlock } from './UserList'
@@ -181,17 +182,19 @@ export default function Studio({ padName }) {
           </div>
 
           {share && (
-            <Editor
-              height="75vh"
-              defaultLanguage="yaml"
-              options={{ minimap: { enabled: false } }}
-              defaultValue={editorValue}
-              onChange={(newValue) =>
-                console.log('setFromMonaco', newValue) ||
-                setEditorValue(newValue ?? '')
-              }
-              onMount={handleEditorDidMount}
-            />
+            <EditorStyle>
+              <Editor
+                height="75vh"
+                defaultLanguage="yaml"
+                options={{ minimap: { enabled: false } }}
+                defaultValue={editorValue}
+                onChange={(newValue) =>
+                  console.log('setFromMonaco', newValue) ||
+                  setEditorValue(newValue ?? '')
+                }
+                onMount={handleEditorDidMount}
+              />
+            </EditorStyle>
           )}
         </section>
         <section
