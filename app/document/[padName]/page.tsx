@@ -1,13 +1,13 @@
 'use client'
 
-import Editor from '@monaco-editor/react'
+//import Editor from '@monaco-editor/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { utils } from 'publicodes'
 import { useCallback, useEffect, useState } from 'react'
 import { MonacoBinding } from 'y-monaco'
-import { generateRoomName } from '../components/share/studioShareUtils'
-import { UserBlock } from '../components/share/UserList'
-import useYjs from '../components/share/useYjs'
+import { generateRoomName } from './studioShareUtils'
+import { UserBlock } from './UserList'
+import useYjs from './useYjs'
 
 const { decodeRuleName } = utils
 
@@ -49,7 +49,8 @@ export default function Studio({ padName }) {
   const yjs = useYjs(urlFragment, 'database', share, setShare)
 
   useEffect(() => {
-    if (urlFragment.length > 2) router.replace(urlFragment)
+    return
+    if (urlFragment.length > 2) router.replace('/document/' + urlFragment)
     //TODO refresh on first replace, to avoid
   }, [urlFragment])
 
@@ -61,6 +62,7 @@ export default function Studio({ padName }) {
   const defaultTarget = target && decodeRuleName(target)
   const monacoCode = share && share.ydoc.getText('monacoCode')
 
+  /*
   const handleEditorDidMount = (editor, monaco) => {
     // here is the editor instance
     // you can store it in `useRef` for further usage
@@ -71,6 +73,7 @@ export default function Studio({ padName }) {
       share.provider.awareness
     )
   }
+  */
 
   // This is for local persistence. TODO is it really needed ?
   useEffect(() => {
@@ -175,7 +178,8 @@ export default function Studio({ padName }) {
             )}
           </div>
 
-          {share && (
+          {/*
+				  share && (
             <Editor
               height="75vh"
               defaultLanguage="yaml"
@@ -186,7 +190,8 @@ export default function Studio({ padName }) {
               }
               onMount={handleEditorDidMount}
             />
-          )}
+          )
+		  */}
         </section>
         <section
           style={
