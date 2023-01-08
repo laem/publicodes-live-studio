@@ -4,7 +4,8 @@ Live version of publi.codes/studio/
 
 # How ?
 
-I'm experimenting NextJS 13's new app directory.
+I'm experimenting NextJS 13's new app directory. 
 
-Implementing this in publicodes/website's docausaurus documentation environment had limitations.
+> Implementing this in publicodes/website's docausaurus documentation environment had limitations.
 
+Works with this server https://github.com/laem/publicodes-live-server
