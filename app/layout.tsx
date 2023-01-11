@@ -10,6 +10,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
+      <head>
+        <meta name="viewport" content="initial-scale=1" />
+      </head>
       <body>
         <header className={styles.header}>
           <img src="/logo-publicodes.svg" className={styles.img} />
