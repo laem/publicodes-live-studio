@@ -2,8 +2,9 @@
 import Link from 'next/link'
 import Engine from 'publicodes'
 import { RulePage } from 'publicodes-react'
+import rules from './co2-fr.json'
 
-const engine = new Engine({ a: 2, b: 'a + 10', 'b . c': 'a * b' })
+const engine = new Engine(rules)
 
 export default function Page({ params: { dottedName } }) {
   return (
