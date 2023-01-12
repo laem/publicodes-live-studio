@@ -7,6 +7,12 @@ export default async function Page() {
     <div>
       <h1>Bienvenue sur le studio publicodes</h1>
       <Link href="/document">C'est parti</Link>
+      <p>
+        Connaissez-vous les pages
+        <Link href="/a">A</Link>
+        et
+        <Link href="/b">B</Link>
+      </p>
     </div>
   )
 }
