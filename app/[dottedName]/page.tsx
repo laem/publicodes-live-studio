@@ -12,3 +12,9 @@ export default function Page({ params: { dottedName } }) {
     </div>
   )
 }
+
+export async function generateStaticParams() {
+  return Object.keys(rules).map((dottedName) => ({
+    dottedName,
+  }))
+}
