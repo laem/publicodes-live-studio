@@ -1,0 +1,23 @@
+diagnostic:
+
+diagnostic . énergie: 
+  formule: surface * conso surfacique
+
+surface: 
+  question: Quelle est la surface de votre logement ? 
+  par défaut: 70 m2
+
+conso surfacique: 
+  variations: 
+    - si: âge > 100
+      alors: 800 kWh/m2
+    - si: âge > 70
+      alors: 400 kWh/m2
+    - si: âge > 30
+      alors: 100 kWh/m2
+    - sinon: 10 kWh/m2
+
+âge: 
+  question: Quel est l'âge de votre logement ?
+  par défaut: 50 ans
+      
