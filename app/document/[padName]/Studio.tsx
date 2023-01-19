@@ -10,8 +10,18 @@ import EXAMPLE_CODE from './exampleCode'
 import ModeSwitchBanner from './ModeSwitchBanner'
 import { generateRoomName } from './studioShareUtils'
 import { UserBlock } from './UserList'
-import useYjs from './useYjs'
 import Vue from './Vue'
+import { WebsocketProvider } from 'y-websocket'
+import * as Y from 'yjs'
+import { WebrtcProvider } from 'y-webrtc'
+import { HocuspocusProvider } from '@hocuspocus/provider'
+
+// Connect it to the backend
+const provider = new HocuspocusProvider({
+  url: 'ws://0.0.0.0:1234',
+  name: 'finistere',
+})
+const ydoc = provider.document
 
 const { decodeRuleName } = utils
 
@@ -27,21 +37,9 @@ export default function Studio({ padName }) {
 
   const urlFragment = encodeURIComponent(name)
 
-  const yjs = useYjs(urlFragment, 'database', share, setShare)
-
-  useEffect(() => {
-    return
-    if (urlFragment.length > 2) router.replace('/document/' + urlFragment)
-    //TODO refresh on first replace, to avoid
-  }, [urlFragment])
-
-  const handleShare = useCallback(() => {
-    window?.navigator.clipboard.writeText(window.location.href)
-  }, [window.location.href])
-
   const target = searchParams.get('target')
   const defaultTarget = target && decodeRuleName(target)
-  const monacoCodeShared = share && share.ydoc.getText('monacoCode')
+  const monacoCodeShared = ydoc.getText('monacoCode')
 
   const handleEditorDidMount = (editor, monaco) => {
     // here is the editor instance
@@ -50,30 +48,9 @@ export default function Studio({ padName }) {
       monacoCodeShared,
       editor.getModel(),
       new Set([editor]),
-      share.provider.awareness
+      provider.awareness
     )
   }
-
-  // This is for local persistence. TODO is it really needed ?
-  /*
-  useEffect(() => {
-    share &&
-      share.persistence &&
-      share.persistence.once('synced', () => {
-        console.log('initial content from the local browser database loaded')
-      })
-  }, [yjs])
-  */
-
-  useEffect(() => {
-    share &&
-      share.provider &&
-      share.provider.once('synced', () => {
-        //console.log('initial content from the online database loaded')
-        console.log('Provider synced log', monacoCodeShared.toString())
-        //if (monacoCodeShared.toString() === '') monacoCodeShared.insert(0, EXAMPLE_CODE)
-      })
-  }, [share, monacoCodeShared])
 
   useEffect(() => {
     console.log('SALU', monacoCodeShared?.toString())
@@ -132,29 +109,17 @@ export default function Studio({ padName }) {
             }[layout]
           }
         >
-          <div>
-            {yjs && (
-              <UserBlock
-                {...{ users: yjs.users, username: yjs.username, room: name }}
-              />
-            )}
-          </div>
-
-          {share && (
-            <EditorStyle users={yjs.users}>
-              <Editor
-                height="75vh"
-                defaultLanguage="yaml"
-                options={{ minimap: { enabled: false } }}
-                defaultValue={editorValue}
-                onChange={(newValue) =>
-                  console.log('setFromMonaco', newValue) ||
-                  setEditorValue(newValue ?? '')
-                }
-                onMount={handleEditorDidMount}
-              />
-            </EditorStyle>
-          )}
+          <Editor
+            height="75vh"
+            defaultLanguage="yaml"
+            options={{ minimap: { enabled: false } }}
+            defaultValue={editorValue}
+            onChange={(newValue) =>
+              console.log('setFromMonaco', newValue) ||
+              setEditorValue(newValue ?? '')
+            }
+            onMount={handleEditorDidMount}
+          />
         </section>
         <section
           style={
@@ -165,9 +130,7 @@ export default function Studio({ padName }) {
             }[layout]
           }
         >
-          <Vue
-            {...{ defaultTarget, handleShare, rules: debouncedEditorValue }}
-          />
+          <Vue {...{ defaultTarget, rules: debouncedEditorValue }} />
         </section>
       </div>
     </div>
