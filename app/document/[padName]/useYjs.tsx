@@ -32,12 +32,11 @@ export default (room, connectionType: 'p2p' | 'database', share, setShare) => {
     if (!share) {
       const ydoc = new Y.Doc()
 
-      const persistence = new IndexeddbPersistence(room, ydoc)
+      const persistence = null //new IndexeddbPersistence(room, ydoc)
       const provider =
         connectionType === 'p2p'
           ? new WebrtcProvider(room, ydoc, {})
           : new WebsocketProvider(
-              //TODO launch a publicodes server on scalingo
               'wss://publicodes-live-server.osc-fr1.scalingo.io',
               room,
               ydoc

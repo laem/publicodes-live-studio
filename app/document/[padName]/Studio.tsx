@@ -5,15 +5,13 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { utils } from 'publicodes'
 import { useCallback, useEffect, useState } from 'react'
 import { MonacoBinding } from 'y-monaco'
-import Documentation from './Documentation'
 import EditorStyle from './EditorStyle'
-import ErrorBoundary from './ErrorBoundary'
+import EXAMPLE_CODE from './exampleCode'
+import ModeSwitchBanner from './ModeSwitchBanner'
 import { generateRoomName } from './studioShareUtils'
 import { UserBlock } from './UserList'
 import useYjs from './useYjs'
-import EXAMPLE_CODE from './exampleCode'
 import Vue from './Vue'
-import ModeSwitchBanner from './ModeSwitchBanner'
 
 const { decodeRuleName } = utils
 
@@ -43,13 +41,13 @@ export default function Studio({ padName }) {
 
   const target = searchParams.get('target')
   const defaultTarget = target && decodeRuleName(target)
-  const monacoCode = share && share.ydoc.getText('monacoCode')
+  const monacoCodeShared = share && share.ydoc.getText('monacoCode')
 
   const handleEditorDidMount = (editor, monaco) => {
     // here is the editor instance
     // you can store it in `useRef` for further usage
     const monacoBinding = new MonacoBinding(
-      monacoCode,
+      monacoCodeShared,
       editor.getModel(),
       new Set([editor]),
       share.provider.awareness
@@ -57,6 +55,7 @@ export default function Studio({ padName }) {
   }
 
   // This is for local persistence. TODO is it really needed ?
+  /*
   useEffect(() => {
     share &&
       share.persistence &&
@@ -64,20 +63,21 @@ export default function Studio({ padName }) {
         console.log('initial content from the local browser database loaded')
       })
   }, [yjs])
+  */
 
   useEffect(() => {
     share &&
       share.provider &&
       share.provider.once('synced', () => {
-        console.log('initial content from the online database loaded')
-        console.log('Provider synced log', monacoCode.toString())
-        if (monacoCode.toString() === '') monacoCode.insert(0, EXAMPLE_CODE)
+        //console.log('initial content from the online database loaded')
+        console.log('Provider synced log', monacoCodeShared.toString())
+        //if (monacoCodeShared.toString() === '') monacoCodeShared.insert(0, EXAMPLE_CODE)
       })
-  }, [yjs, monacoCode])
+  }, [share, monacoCodeShared])
 
   useEffect(() => {
-    console.log('SALU', monacoCode?.toString())
-  }, [monacoCode])
+    console.log('SALU', monacoCodeShared?.toString())
+  }, [monacoCodeShared])
 
   const layoutModes = {
     code: '💻️ Code',
