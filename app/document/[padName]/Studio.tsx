@@ -11,31 +11,11 @@ import ErrorBoundary from './ErrorBoundary'
 import { generateRoomName } from './studioShareUtils'
 import { UserBlock } from './UserList'
 import useYjs from './useYjs'
+import EXAMPLE_CODE from './exampleCode'
+import Vue from './Vue'
+import ModeSwitchBanner from './ModeSwitchBanner'
 
 const { decodeRuleName } = utils
-
-const EXAMPLE_CODE = `
-# Bienvenue dans le bac à sable publicodes !
-# ⚠️ Le bac à sable est utile pour expérimenter, mais : 
-# - fiabilité: assurez-vous rapidement que votre code soit stocké de façon sécurisé ailleurs, par exemple sur un dépôt Github
-# - sécurité: ne l'utilisez pas pour du code secret
-#
-# Pour en savoir plus sur le langage :
-# => https://publi.codes/docs/principes-de-base
-#
-
-prix:
-  avec:
-    carottes: 2€/kg
-    champignons: 5€/kg
-    avocat: 2€/avocat
-
-dépenses primeur:
-  somme:
-    - prix . carottes * 1.5 kg
-    - prix . champignons * 500g
-    - prix . avocat * 3 avocat
-`
 
 export default function Studio({ padName }) {
   const [layout, setLayout] = useState('split')
@@ -99,7 +79,11 @@ export default function Studio({ padName }) {
     console.log('SALU', monacoCode?.toString())
   }, [monacoCode])
 
-  const layoutModes = { code: 'Code', split: 'Partagé', view: 'Documentation' }
+  const layoutModes = {
+    code: '💻️ Code',
+    split: '↔ Partagé',
+    view: '🪟 Interface',
+  }
 
   return (
     <div
@@ -114,18 +98,6 @@ export default function Studio({ padName }) {
           overflow: auto;
         }
 
-        > ul {
-          background: #2653ce;
-          padding: 0.2rem;
-          display: flex;
-          justify-content: center;
-          list-style-type: none;
-          margin: 0;
-        }
-
-        > ul > li {
-          margin: 0 0.6rem;
-        }
         > div {
           display: flex;
         }
@@ -143,13 +115,13 @@ export default function Studio({ padName }) {
         }
       `}
     >
-      <ul id="layoutButtons">
+      <ModeSwitchBanner>
         {Object.entries(layoutModes).map(([key, value]) => (
           <li key={key} onClick={() => setLayout(key)}>
             <button>{value}</button>
           </li>
         ))}
-      </ul>
+      </ModeSwitchBanner>
       <div>
         <section
           style={
@@ -160,19 +132,6 @@ export default function Studio({ padName }) {
             }[layout]
           }
         >
-          <div>
-            <input
-              type="string"
-              style={{ width: '16rem' }}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Le nom de votre document"
-            />
-
-            <button onClick={() => setName(generateRoomName())}>
-              ♻️ Générer un autre nom
-            </button>
-          </div>
           <div>
             {yjs && (
               <UserBlock
@@ -206,14 +165,9 @@ export default function Studio({ padName }) {
             }[layout]
           }
         >
-          <ErrorBoundary key={debouncedEditorValue}>
-            <Documentation
-              rules={debouncedEditorValue}
-              onClickShare={handleShare}
-              defaultTarget={defaultTarget}
-              baseUrl="/studio"
-            />
-          </ErrorBoundary>
+          <Vue
+            {...{ defaultTarget, handleShare, rules: debouncedEditorValue }}
+          />
         </section>
       </div>
     </div>
