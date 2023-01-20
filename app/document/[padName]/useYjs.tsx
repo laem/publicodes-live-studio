@@ -8,6 +8,7 @@ import * as Y from 'yjs'
 import { generateFruitName, stringToColour } from './studioShareUtils'
 import useLocalStorageState from 'use-local-storage-state'
 import { IndexeddbPersistence } from 'y-indexeddb'
+import { HocuspocusProvider } from '@hocuspocus/provider'
 
 localStorage.log = 'y-webrtc'
 
@@ -30,17 +31,21 @@ export default (room, connectionType: 'p2p' | 'database', share, setShare) => {
   useEffect(() => {
     if (!username || (!room && !share)) return
     if (!share) {
-      const ydoc = new Y.Doc()
+      let ydoc, provider
 
       const persistence = null //new IndexeddbPersistence(room, ydoc)
-      const provider =
-        connectionType === 'p2p'
-          ? new WebrtcProvider(room, ydoc, {})
-          : new WebsocketProvider(
-              'wss://publicodes-live-server.osc-fr1.scalingo.io',
-              room,
-              ydoc
-            )
+      if (connectionType === 'p2p') {
+        ydoc = new Y.Doc()
+        provider = new WebrtcProvider(room, ydoc, {})
+      } else {
+        provider = new HocuspocusProvider({
+          //url: 'ws://localhost:1234',
+          url: 'wss://publicodes-live-server.osc-fr1.scalingo.io',
+          name: room,
+        })
+
+        ydoc = provider.document
+      }
 
       provider.on('status', (event) => {
         console.log('YJS provider log status', event.status) // logs "connected" or "disconnected"

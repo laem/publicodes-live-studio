@@ -14,14 +14,7 @@ import Vue from './Vue'
 import { WebsocketProvider } from 'y-websocket'
 import * as Y from 'yjs'
 import { WebrtcProvider } from 'y-webrtc'
-import { HocuspocusProvider } from '@hocuspocus/provider'
-
-// Connect it to the backend
-const provider = new HocuspocusProvider({
-  url: 'ws://0.0.0.0:1234',
-  name: 'finistere',
-})
-const ydoc = provider.document
+import useYjs from './useYjs'
 
 const { decodeRuleName } = utils
 
@@ -39,7 +32,10 @@ export default function Studio({ padName }) {
 
   const target = searchParams.get('target')
   const defaultTarget = target && decodeRuleName(target)
-  const monacoCodeShared = ydoc.getText('monacoCode')
+
+  const yjs = useYjs(urlFragment, 'database', share, setShare)
+
+  const monacoCodeShared = share?.ydoc.getText('monacoCode')
 
   const handleEditorDidMount = (editor, monaco) => {
     // here is the editor instance
@@ -48,7 +44,7 @@ export default function Studio({ padName }) {
       monacoCodeShared,
       editor.getModel(),
       new Set([editor]),
-      provider.awareness
+      share.provider.awareness
     )
   }
 
@@ -109,17 +105,21 @@ export default function Studio({ padName }) {
             }[layout]
           }
         >
-          <Editor
-            height="75vh"
-            defaultLanguage="yaml"
-            options={{ minimap: { enabled: false } }}
-            defaultValue={editorValue}
-            onChange={(newValue) =>
-              console.log('setFromMonaco', newValue) ||
-              setEditorValue(newValue ?? '')
-            }
-            onMount={handleEditorDidMount}
-          />
+          {share && (
+            <EditorStyle users={yjs.users}>
+              <Editor
+                height="75vh"
+                defaultLanguage="yaml"
+                options={{ minimap: { enabled: false } }}
+                defaultValue={editorValue}
+                onChange={(newValue) =>
+                  console.log('setFromMonaco', newValue) ||
+                  setEditorValue(newValue ?? '')
+                }
+                onMount={handleEditorDidMount}
+              />
+            </EditorStyle>
+          )}
         </section>
         <section
           style={
