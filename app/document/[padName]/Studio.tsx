@@ -79,7 +79,7 @@ export default function Studio({ padName }) {
 
         @media (max-width: 960px) {
           flex-direction: column;
-          padding: 20px;
+          padding: 0.2rem;
 
           > :first-child {
             width: 100% !important;
