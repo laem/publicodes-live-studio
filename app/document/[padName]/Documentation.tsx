@@ -6,7 +6,6 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import Engine, { utils } from 'publicodes'
 import { getDocumentationSiteMap, RulePage } from 'publicodes-react'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { parse } from 'yaml'
 import ErrorBoundary, { nl2br } from './ErrorBoundary'
 
 function invertObject(obj) {
@@ -60,12 +59,9 @@ export default function Documentation({
   onTargetChange,
   baseUrl,
   showDevSection,
+  engine,
 }: ResultsProps) {
   const logger = useMemo(() => new Logger(), [rules])
-  const engine = useMemo(
-    () => new Engine(parse(rules), { logger }),
-    [rules, logger]
-  )
   const targets = useMemo(() => Object.keys(engine.getParsedRules()), [engine])
   const pathToRules = useMemo(
     () => getDocumentationSiteMap({ engine, documentationPath: '' }),
