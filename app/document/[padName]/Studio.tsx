@@ -112,7 +112,12 @@ export default function Studio({ padName }) {
           <div>
             {yjs && (
               <UserBlock
-                {...{ users: yjs.users, username: yjs.username, room: name }}
+                {...{
+                  users: yjs.users,
+                  username: yjs.username,
+                  room: name,
+                  connected,
+                }}
               />
             )}
           </div>

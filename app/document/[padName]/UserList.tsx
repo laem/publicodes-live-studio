@@ -1,6 +1,7 @@
 'use client'
 //import { findContrastedTextColor } from '../../../components/utils/colors'
 
+/* To test the UI
 const fakeUsers = [
   { id: 3448026119, name: 'nèfle biene', color: '#1adb86' },
   { id: 3448026119, name: 'nèfle biene', color: '#1adb86' },
@@ -11,6 +12,7 @@ const fakeUsers = [
   { id: 3448026119, name: 'nèfle biene', color: '#1adb86' },
   { id: 3448026119, name: 'nèfle biene', color: '#1adb86' },
 ]
+*/
 export const UserList = ({ users, username }) => (
   <ul
     css={`
@@ -61,18 +63,29 @@ export const UserList = ({ users, username }) => (
   </ul>
 )
 
-export const UserBlock = ({ extremes, users, username, room }) => {
+export const UserBlock = ({ extremes, users, username, room, connected }) => {
   const uniqueUsers = getUniqueUsers(users)
   return (
-    <div
-      css={`
-        margin: 0.6rem !important;
-      `}
-    >
-      <span>Qui est connecté ?</span>{' '}
-      <span role="status">
-        👥 {uniqueUsers.length} participant{plural(uniqueUsers)}
-      </span>
+    <div>
+      <div
+        css={`
+          margin: 0.6rem 0 !important;
+        `}
+      >
+        <span
+          css={`
+            border: 3px solid ${connected ? '#78b159' : 'red'};
+            border-radius: 0.2rem;
+            padding: 0rem 0.2rem;
+            margin-right: 0.6rem;
+          `}
+        >
+          Connection {connected ? '🟢' : '🔴'}
+        </span>
+        <span role="status">
+          👥 {uniqueUsers.length} participant{plural(uniqueUsers)}
+        </span>
+      </div>
       <UserList users={uniqueUsers} username={username} />
     </div>
   )
