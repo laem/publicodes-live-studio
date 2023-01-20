@@ -3,18 +3,15 @@
 import Editor from '@monaco-editor/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { utils } from 'publicodes'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { MonacoBinding } from 'y-monaco'
 import EditorStyle from './EditorStyle'
 import EXAMPLE_CODE from './exampleCode'
 import ModeSwitchBanner from './ModeSwitchBanner'
 import { generateRoomName } from './studioShareUtils'
 import { UserBlock } from './UserList'
-import Vue from './Vue'
-import { WebsocketProvider } from 'y-websocket'
-import * as Y from 'yjs'
-import { WebrtcProvider } from 'y-webrtc'
 import useYjs from './useYjs'
+import Vue from './Vue'
 
 const { decodeRuleName } = utils
 
@@ -25,6 +22,7 @@ export default function Studio({ padName }) {
   const [name, setName] = useState(padName || generateRoomName())
   const [share, setShare] = useState()
   const [editorValue, setEditorValue] = useState(EXAMPLE_CODE)
+  const [connected, setConnected] = useState(false)
 
   const debouncedEditorValue = useDebounce(editorValue, 100)
 
@@ -47,6 +45,12 @@ export default function Studio({ padName }) {
       share.provider.awareness
     )
   }
+  useEffect(() => {
+    share?.provider.on('status', (event) => {
+      console.log('YJS provider log status', event.status) // logs "connected" or "disconnected"
+      setConnected(event.status === 'connected' ? true : false)
+    })
+  }, [share?.provider])
 
   useEffect(() => {
     console.log('SALU', monacoCodeShared?.toString())
@@ -105,6 +109,13 @@ export default function Studio({ padName }) {
             }[layout]
           }
         >
+          <div>
+            {yjs && (
+              <UserBlock
+                {...{ users: yjs.users, username: yjs.username, room: name }}
+              />
+            )}
+          </div>
           {share && (
             <EditorStyle users={yjs.users}>
               <Editor
