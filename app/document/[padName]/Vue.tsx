@@ -22,7 +22,11 @@ export default ({ rules, handleShare, defaultTarget }) => {
     } catch (e) {
       if (e instanceof YAMLParseError)
         setError({ human: 'Votre YAML semble malformé', e })
-      else setError({ human: 'erreur non YAML', e })
+      else
+        setError({
+          human: 'Votre code publicodes semble comporter une erreur de syntaxe',
+          e,
+        })
     }
   }, [rules])
 

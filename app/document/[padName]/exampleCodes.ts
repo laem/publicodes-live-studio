@@ -3,6 +3,12 @@ export default [
     name: 'Dépenses primeur',
     code: `
 
+meta html: 
+  titre: Un petit calcul de primeurs
+  image: https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8bWFyY2glQzMlQTl8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60
+  description: |
+    Une petite démonstration du langage publicodes sur un tout petit calcul de liste de courses
+
 prix:
 avec:
 carottes: 2€/kg
