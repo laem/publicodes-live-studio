@@ -9,23 +9,31 @@ meta html:
   description: |
     Une petite démonstration du langage publicodes sur un tout petit calcul de liste de courses
 
+
 prix:
-avec:
-carottes: 2€/kg
-champignons: 5€/kg
-avocat: 2€/avocat
+  avec:
+    carottes: 2€/kg
+    champignons: 5€/kg
+    avocat: 2€/avocat
 
 dépenses primeur:
-somme:
-- prix . carottes * 1.5 kg
-- prix . champignons * 500g
-- prix . avocat * 3 avocat
+  somme:
+    - prix . carottes * 1.5 kg
+    - prix . champignons * 500g
+    - prix . avocat * 3 avocat
+
 `,
   },
 
   {
     name: 'Diagnostic énergie',
     code: `
+
+meta html: 
+  titre: Mon mini DPE
+  image: https://images.unsplash.com/photo-1523495909838-79c67b15be34?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8aGVhdGluZ3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60
+  description: |
+    Une petite démonstration du langage publicodes sur un tout petit modèle de diagnostic énergétique
 
 diagnostic:
 
@@ -54,6 +62,12 @@ conso surfacique:
   {
     name: 'Salaire net',
     code: `
+
+meta html: 
+  titre: Ma feuille de paie sur-simplifiée 
+  image: https://images.unsplash.com/photo-1579170053380-58064b2dee67?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80
+  description: |
+    Une petite démonstration du langage publicodes sur un tout petit modèle de cotisations sociales
 
 salaire net: salaire brut - cotisations salariales
 
