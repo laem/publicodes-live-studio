@@ -16,36 +16,39 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       WebSocketPolyfill: ws,
     })
 
-    const onStatus = (event) => {
-      if (event.status === 'connected') {
-        const text = provider.document.getText('monacoCode')
-        // HACK : how to know if empty ? Know when fully loaded ?
-        const timeoutFunction = setTimeout(() => {
-          if (!text.length) {
+    return new Promise(async (resolve) => {
+      const onStatus = (event) => {
+        if (event.status === 'connected') {
+          const text = provider.document.getText('monacoCode')
+          // HACK : how to know if empty ? Know when fully loaded ?
+          const timeoutFunction = setTimeout(() => {
+            if (!text.length) {
+              provider.off('status', onStatus)
+              provider.disconnect()
+              clearTimeout(timeoutFunction)
+              res.status(200).json({ name, content: null })
+              return resolve()
+            }
+          }, 500)
+
+          const observeFunction = (event) => {
+            const content = parse(text.toJSON())
+
+            text.unobserve(observeFunction)
             provider.off('status', onStatus)
             provider.disconnect()
             clearTimeout(timeoutFunction)
-            return res.status(200).json({ name, content: null })
+
+            res.status(200).json({ name, content })
+            return resolve()
           }
-        }, 500)
-
-        const observeFunction = (event) => {
-          const content = parse(text.toJSON())
-
-          text.unobserve(observeFunction)
-          provider.off('status', onStatus)
-          provider.disconnect()
-          clearTimeout(timeoutFunction)
-
-          return res.status(200).json({ name, content })
+          return text.observe(observeFunction)
+        } else {
+          return null
         }
-        return text.observe(observeFunction)
-      } else {
-        return null
       }
-    }
-
-    return provider.on('status', onStatus)
+      provider.on('status', onStatus)
+    })
   } catch (error) {
     return res.status(405).json(error)
   }
