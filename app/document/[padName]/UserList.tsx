@@ -67,7 +67,8 @@ export const UserList = ({ users, username }) => (
 )
 
 export const UserBlock = ({ extremes, users, username, room, connected }) => {
-  const uniqueUsers = getUniqueUsers(users)
+  const uniqueUsers = getUniqueNamedUsers(users)
+  console.log('U', uniqueUsers)
   return (
     <div>
       <div
@@ -95,11 +96,13 @@ export const UserBlock = ({ extremes, users, username, room, connected }) => {
 }
 const plural = (list) => (list.length > 1 ? 's' : '')
 
-const getUniqueUsers = (array) =>
-  array.filter(
-    (value, index, self) =>
-      index ===
-      self.findIndex(
-        (elt) => elt.name === value.name && elt.color === value.color
-      )
-  )
+const getUniqueNamedUsers = (array) =>
+  array
+    .filter((u) => u.name)
+    .filter(
+      (value, index, self) =>
+        index ===
+        self.findIndex(
+          (elt) => elt.name === value.name && elt.color === value.color
+        )
+    )

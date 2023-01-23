@@ -114,7 +114,7 @@ export default function Studio({ padName }) {
             {yjs && (
               <UserBlock
                 {...{
-                  users: yjs.users,
+                  users: console.log(yjs.users) || yjs.users,
                   username: yjs.username,
                   room: name,
                   connected,
