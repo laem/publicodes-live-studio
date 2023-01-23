@@ -20,15 +20,22 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       if (event.status === 'connected') {
         const text = provider.document.getText('monacoCode')
         // HACK : how to know if empty ? Know when fully loaded ?
-        setTimeout(() => {
-          if (!text.length) return res.status(200).json({ name, content: null })
+        const timeoutFunction = setTimeout(() => {
+          if (!text.length) {
+            provider.off('status', onStatus)
+            provider.disconnect()
+            clearTimeout(timeoutFunction)
+            return res.status(200).json({ name, content: null })
+          }
         }, 500)
+
         const observeFunction = (event) => {
           const content = parse(text.toJSON())
 
           text.unobserve(observeFunction)
           provider.off('status', onStatus)
           provider.disconnect()
+          clearTimeout(timeoutFunction)
 
           return res.status(200).json({ name, content })
         }
@@ -38,7 +45,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       }
     }
 
-    provider.on('status', onStatus)
+    return provider.on('status', onStatus)
   } catch (error) {
     return res.status(405).json(error)
   }
