@@ -19,13 +19,19 @@ export default async function Head({ params }: { params: { slug: string } }) {
   const data = await getData(params.padName)
   const image = data.content['meta html']?.image
   const title =
-    data.content['meta html']?.titre ||
-    `${params.padName} | Publicodes live studio`
+      data.content['meta html']?.titre ||
+      `${params.padName} | Publicodes live studio`,
+    description = data.content['meta html']?.description
 
   return (
     <>
       <title>{title}</title>
+      <meta property="og:title" content={title} />
       <meta property="og:image" content={image} />
+      <meta property="og:type" content="website" />
+      <meta property="twitter:card" content="summary_large_image" />
+      <meta name="description" content={description} />
+      <meta name="og:description" content={description} />
     </>
   )
 }
