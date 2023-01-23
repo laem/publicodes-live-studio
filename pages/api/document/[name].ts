@@ -7,24 +7,35 @@ import { HocuspocusProvider } from '@hocuspocus/provider'
 import { parse } from 'yaml'
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { name } = req.query
+  try {
+    const { name } = req.query
 
-  const provider = new HocuspocusProvider({
-    url: 'wss://publicodes-live-server.osc-fr1.scalingo.io',
-    name,
-    WebSocketPolyfill: ws,
-  })
+    const provider = new HocuspocusProvider({
+      url: 'wss://publicodes-live-server.osc-fr1.scalingo.io',
+      name,
+      WebSocketPolyfill: ws,
+    })
 
-  provider.on('status', (event) => {
-    if (event.status === 'connected') {
-      const text = provider.document.getText('monacoCode')
-      const observeFunction = (event) => {
-        res.status(200).json({ name, content: parse(text.toJSON()) })
-        provider.disconnect()
+    const onStatus = (event) => {
+      if (event.status === 'connected') {
+        const text = provider.document.getText('monacoCode')
+        const observeFunction = (event) => {
+          const content = parse(text.toJSON())
 
-        text.unobserve(observeFunction)
+          text.unobserve(observeFunction)
+          provider.off('status', onStatus)
+          provider.disconnect()
+
+          return res.status(200).json({ name, content })
+        }
+        return text.observe(observeFunction)
+      } else {
+        return null
       }
-      text.observe(observeFunction)
     }
-  })
+
+    provider.on('status', onStatus)
+  } catch (error) {
+    return res.status(405).json(error)
+  }
 }
