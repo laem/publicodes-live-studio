@@ -1,3 +1,3 @@
 export default ({ engine }) => {
-  return <div>Salut poto</div>
+  return <div>Bientôt, la possibilité de renseigner les champs manquants</div>
 }
