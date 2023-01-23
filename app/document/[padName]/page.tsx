@@ -1,5 +1,4 @@
-'use client'
-import Studio from './Studio'
+import SafeStudio from './SafeStudio'
 
 export default function Page({
   params,
@@ -8,5 +7,9 @@ export default function Page({
   params: { padName: string }
   searchParams?: { [key: string]: string | string[] | undefined }
 }) {
-  return <div>{params.padName}</div>
+  return (
+    <div>
+      <SafeStudio padName={params.padName} />
+    </div>
+  )
 }
