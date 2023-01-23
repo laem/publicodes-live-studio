@@ -1,5 +1,12 @@
 'use client'
 
-import Studio from './Studio'
+import { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
 
-export default ({ padName }) => <Studio padName={padName} />
+const DynamicStudio = dynamic(() => import('./Studio'), {
+  ssr: false,
+})
+
+export default ({ padName }) => {
+  return <DynamicStudio padName={padName} />
+}
