@@ -16,8 +16,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       WebSocketPolyfill: ws,
     })
 
+    // HACK : I don't know why onConnect() is run twice
+    let connectFunctionFired = false
+
     return new Promise(async (resolve) => {
       const onConnect = () => {
+        if (connectFunctionFired) return
+        connectFunctionFired = true
         const text = provider.document.getText('monacoCode')
         // HACK : how to know if empty ? Know when fully loaded ?
         const timeoutFunction = setTimeout(() => {
@@ -43,7 +48,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         }
         return text.observe(observeFunction)
       }
-      provider.on('connect', onConnect)
+      return provider.on('connect', onConnect)
     })
   } catch (error) {
     return res.status(405).json(error)
