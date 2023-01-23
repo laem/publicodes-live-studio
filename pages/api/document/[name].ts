@@ -17,37 +17,33 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     })
 
     return new Promise(async (resolve) => {
-      const onStatus = (event) => {
-        if (event.status === 'connected') {
-          const text = provider.document.getText('monacoCode')
-          // HACK : how to know if empty ? Know when fully loaded ?
-          const timeoutFunction = setTimeout(() => {
-            if (!text.length) {
-              provider.off('status', onStatus)
-              provider.disconnect()
-              clearTimeout(timeoutFunction)
-              res.status(200).json({ name, content: null })
-              return resolve()
-            }
-          }, 500)
-
-          const observeFunction = (event) => {
-            const content = parse(text.toJSON())
-
-            text.unobserve(observeFunction)
-            provider.off('status', onStatus)
+      const onConnect = () => {
+        const text = provider.document.getText('monacoCode')
+        // HACK : how to know if empty ? Know when fully loaded ?
+        const timeoutFunction = setTimeout(() => {
+          if (!text.length) {
+            provider.off('connect', onConnect)
             provider.disconnect()
             clearTimeout(timeoutFunction)
-
-            res.status(200).json({ name, content })
+            res.status(200).json({ name, content: null })
             return resolve()
           }
-          return text.observe(observeFunction)
-        } else {
-          return null
+        }, 500)
+
+        const observeFunction = (event) => {
+          const content = parse(text.toJSON())
+
+          text.unobserve(observeFunction)
+          provider.off('connect', onConnect)
+          provider.disconnect()
+          clearTimeout(timeoutFunction)
+
+          res.status(200).json({ name, content })
+          return resolve()
         }
+        return text.observe(observeFunction)
       }
-      provider.on('status', onStatus)
+      provider.on('connect', onConnect)
     })
   } catch (error) {
     return res.status(405).json(error)
