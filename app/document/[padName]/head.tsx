@@ -16,15 +16,22 @@ async function getData(name) {
 }
 
 export default async function Head({ params }: { params: { slug: string } }) {
-  const data = await getData(params.padName),
-    content = data.content,
+  const defaultTitle = `${params.padName} | Publicodes live studio`
+  const data = await getData(params.padName)
+
+  if (!data || !data.content)
+    return (
+      <>
+        <title>{defaultTitle}</title>
+      </>
+    )
+  const content = data.content,
     meta = content && content['meta html']
 
   const image = meta && meta.image,
     description = meta && meta.description
 
-  const title =
-    (meta && meta.titre) || `${params.padName} | Publicodes live studio`
+  const title = (meta && meta.titre) || defaultTitle
 
   return (
     <>
