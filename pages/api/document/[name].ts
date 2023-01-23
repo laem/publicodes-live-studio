@@ -19,7 +19,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     const onStatus = (event) => {
       if (event.status === 'connected') {
         const text = provider.document.getText('monacoCode')
-        if (!text.length) return res.status(200).json({ name, content: null })
+        setTimeout(() => {
+          if (!text.length) return res.status(200).json({ name, content: null })
+        }, 500)
         const observeFunction = (event) => {
           const content = parse(text.toJSON())
 

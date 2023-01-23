@@ -33,33 +33,36 @@ export const UserList = ({ users, username }) => (
       height: 1.6rem;
     `}
   >
-    {users.map((u) => (
-      <li key={u.name}>
-        <div
-          css={`
-            display: flex;
-            align-items: center;
-            margin-right: 0.6rem;
-          `}
-        >
-          <div
-            css={`
-              background: ${u.color};
-              width: 1rem;
-              height: 1rem;
-              border-radius: 0.2rem;
-              margin-right: 0.3rem;
-            `}
-          />
-          <div className="avatar__intro">
-            <div className="avatar__name">
-              {u.name}
-              {u.name === username && ' (toi)'}
+    {users.map(
+      (u) =>
+        console.log(u.name) || (
+          <li key={u.name}>
+            <div
+              css={`
+                display: flex;
+                align-items: center;
+                margin-right: 0.6rem;
+              `}
+            >
+              <div
+                css={`
+                  background: ${u.color};
+                  width: 1rem;
+                  height: 1rem;
+                  border-radius: 0.2rem;
+                  margin-right: 0.3rem;
+                `}
+              />
+              <div className="avatar__intro">
+                <div className="avatar__name">
+                  {u.name}
+                  {u.name === username && ' (toi)'}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </li>
-    ))}
+          </li>
+        )
+    )}
   </ul>
 )
 
