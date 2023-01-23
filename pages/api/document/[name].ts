@@ -19,6 +19,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     const onStatus = (event) => {
       if (event.status === 'connected') {
         const text = provider.document.getText('monacoCode')
+        // HACK : how to know if empty ? Know when fully loaded ?
         setTimeout(() => {
           if (!text.length) return res.status(200).json({ name, content: null })
         }, 500)
