@@ -22,14 +22,22 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         // HACK : how to know if empty ? Know when fully loaded ?
         provider.off('synced', onSynced)
         provider.disconnect()
-        res
-          .status(200)
-          .json({ name, content: text.length ? parse(text.toJSON()) : null })
+        if (!text.length) {
+          res.status(200).json({ name, content: null })
+        } else {
+          try {
+            const parsed = parse(text.toJSON())
+            res.status(200).json({ name, content: parsed })
+          } catch (e) {
+            res.status(500).json({ name, error: e })
+          }
+        }
+
         return resolve()
       }
       return provider.on('synced', onSynced)
     })
   } catch (error) {
-    return res.status(405).json(error)
+    return res.status(500).json(error)
   }
 }
