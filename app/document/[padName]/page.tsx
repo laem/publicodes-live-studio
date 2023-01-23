@@ -1,3 +1,4 @@
+'use client'
 import Studio from './Studio'
 
 export default function Page({
@@ -7,5 +8,5 @@ export default function Page({
   params: { padName: string }
   searchParams?: { [key: string]: string | string[] | undefined }
 }) {
-  return <Studio padName={params.padName} />
+  return <div>{params.padName}</div>
 }
